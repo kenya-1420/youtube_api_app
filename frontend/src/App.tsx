@@ -1,10 +1,26 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
+import axios from 'axios'
 import './App.css'
+// import Message from './Message'
 
-function App() {
+const App = () => {
   const [count, setCount] = useState(0)
+  const [msg, setMsg] = useState<any>([{}])
+
+  useEffect(() => {
+    (async () => {
+      console.log("aaa")
+      try {
+        const res = await axios.get('http://localhost:8080/api')
+        console.log(res.data)
+        // console.log(res.data)
+      } catch(e) {
+        console.log(e)
+      }
+    })()
+  },[])
 
   return (
     <>
@@ -21,8 +37,13 @@ function App() {
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
         </button>
+          <ul>
+          {msg.map((m) => {
+            <li>{m.Title}</li>
+          })}
+          </ul>
         <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
+          {/* <Message messages={msg}/> */}
         </p>
       </div>
       <p className="read-the-docs">
