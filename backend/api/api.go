@@ -32,7 +32,15 @@ func SearchByKeyword(service *youtube.Service, part string, query string) []*you
 				Order("videoCount").
 				MaxResults(25)
 
-	res, _ := call.Do()
+	res, err := call.Do()
+	if err != nil {
+		fmt.Println(err)
+		fmt.Println("===========================")
+		fmt.Printf("Error : %v\n", err)
+		fmt.Println("===========================")
+	}
+
+
 	SearchListResponse := res.Items
 
 	// fmt.Printf("%s: %s\n", query, res.Items[0].Id.ChannelId)

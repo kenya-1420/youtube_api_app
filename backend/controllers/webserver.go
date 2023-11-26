@@ -7,6 +7,8 @@ import (
 
 	"sample_app/api"
 
+	// "github.com/gorilla/mux"
+
 	"google.golang.org/api/option"
 	"google.golang.org/api/youtube/v3"
 )
@@ -50,7 +52,9 @@ import (
 
 func StartWebServer() {
 	fmt.Println("Start Web Server!")
+	// r := mux.NewRouter()
 	// http.HandleFunc("/api/todos", getTodos)
+	// r.HandleFunc("/api", getApi).Method()
 	http.HandleFunc("/api",getApi)
 	// return 
 	http.ListenAndServe(":8080", nil)
@@ -63,9 +67,13 @@ func getApi(w http.ResponseWriter, r *http.Request) {
 	apiKey := api.GetApiKey()
 
 	// service, err :=
-	service, _ := youtube.NewService(ctx, option.WithAPIKey(apiKey))
-	SearchResults := api.SearchByKeyword(service, "snippet", "ヒカキン")
+	service, err := youtube.NewService(ctx, option.WithAPIKey(apiKey))
 	
+	if err != nil {
+		fmt.Println("ここでエラー")
+	} 
+	SearchResults := api.SearchByKeyword(service, "snippet", "東海オンエア")
+
 	var ids []string
 	for _, value := range SearchResults {
 		ids = append(ids, value.Id.ChannelId)
@@ -87,6 +95,8 @@ func getApi(w http.ResponseWriter, r *http.Request) {
 	w.Write(responseBody)
 }
 
-func getReactApi(w http.ResponseWriter, r *http.Request) {
-
-}
+// func getReactApi(w http.ResponseWriter, r *http.Request) {
+// 	method := "POST"
+// 	url := "http://localhost:5173"
+// 	req, err := http.NewRequest(method, url)
+// }

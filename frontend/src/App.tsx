@@ -5,9 +5,52 @@ import axios from 'axios'
 import './App.css'
 // import Message from './Message'
 
+type YoutubeData = {
+  contentDetails: {
+    relatedPlaylists: {
+      uploads: string;
+    };
+  };
+  etag: string;
+  id: string;
+  kind: string;
+  snippet: {
+    customUrl: string;
+    description: string;
+    localized: {
+      description: string;
+      title: string;
+    };
+    publishedAt: string;
+    thumbnails: {
+      default: {
+        height: number;
+        url: string;
+        width: number;
+      };
+      high: {
+        height: number;
+        url: string;
+        width: number;
+      };
+      medium: {
+        height: number;
+        url: string;
+        width: number;
+      };
+    };
+    title: string;
+  };
+  statistics: {
+    subscriberCount: string;
+    videoCount: string;
+    viewCount: string;
+  };
+}
+
 const App = () => {
   const [count, setCount] = useState(0)
-  const [msg, setMsg] = useState<any>([{}])
+  const [msg, setMsg] = useState<YoutubeData[]>([])
 
   useEffect(() => {
     (async () => {
@@ -15,6 +58,7 @@ const App = () => {
       try {
         const res = await axios.get('http://localhost:8080/api')
         console.log(res.data)
+        setMsg(res.data)
         // console.log(res.data)
       } catch(e) {
         console.log(e)
@@ -38,9 +82,9 @@ const App = () => {
           count is {count}
         </button>
           <ul>
-          {msg.map((m) => {
-            <li>{m.Title}</li>
-          })}
+            {msg.map((data) => (
+              <li key={data.id}>{data.id}</li>
+            ))}
           </ul>
         <p>
           {/* <Message messages={msg}/> */}
